@@ -18,6 +18,6 @@
 
 <resources>
 
-    <style name="TestHostTheme" parent="@android:style/Theme.NoTitleBar.Fullscreen" />
+    <style name="TestHostTheme" parent="Theme.AppCompat.Light.NoActionBar" />
 
 </resources>

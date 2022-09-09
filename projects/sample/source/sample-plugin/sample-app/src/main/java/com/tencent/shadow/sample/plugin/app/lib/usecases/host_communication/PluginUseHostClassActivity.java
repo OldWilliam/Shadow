@@ -18,12 +18,18 @@
 
 package com.tencent.shadow.sample.plugin.app.lib.usecases.host_communication;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.tencent.shadow.sample.host.lib.HostUiLayerProvider;
+import com.tencent.shadow.sample.host.lib.MPermissions;
+import com.tencent.shadow.sample.plugin.app.lib.R;
 import com.tencent.shadow.sample.plugin.app.lib.gallery.BaseActivity;
 import com.tencent.shadow.sample.plugin.app.lib.gallery.cases.entity.UseCase;
 
@@ -48,13 +54,49 @@ public class PluginUseHostClassActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.TestHostTheme);
 
         LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         HostUiLayerProvider hostUiLayerProvider = HostUiLayerProvider.getInstance();
         View hostUiLayer = hostUiLayerProvider.buildHostUiLayer();
         linearLayout.addView(hostUiLayer);
 
         setContentView(linearLayout);
+
+
+        Button textView = new Button(this);
+        textView.setText("模拟插件向宿主调用请求权限功能，弹出AppCompat会崩溃");
+        linearLayout.addView(textView);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MPermissions.getInstance().requestPermission(PluginUseHostClassActivity.this);
+            }
+        });
+
+        Button testDialog = new Button(this);
+        testDialog.setText("插件自己弹AppCompatDialog没事");
+        testDialog.setOnClickListener(v -> {
+            new AlertDialog.Builder(PluginUseHostClassActivity.this)
+                    .setTitle("权限 Title")
+                    .setMessage("权限 Msg")
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton("go", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+
+                        }
+                    })
+                    .show();
+        });
+        linearLayout.addView(testDialog);
     }
 }

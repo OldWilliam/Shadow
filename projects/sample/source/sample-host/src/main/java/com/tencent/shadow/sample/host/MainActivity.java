@@ -30,11 +30,14 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.tencent.shadow.sample.constant.Constant;
+import com.tencent.shadow.sample.host.lib.MPermissions;
 import com.tencent.shadow.sample.host.plugin_view.HostAddPluginViewActivity;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +99,13 @@ public class MainActivity extends Activity {
             startActivity(intent);
         });
         rootView.addView(startHostAddPluginViewActivityButton);
+
+        Button testDialog = new Button(this);
+        testDialog.setText("宿主自己弹AppCompatDialog没事");
+        testDialog.setOnClickListener(v -> {
+            MPermissions.getInstance().requestPermission(MainActivity.this);
+        });
+        rootView.addView(testDialog);
 
         setContentView(rootView);
 
